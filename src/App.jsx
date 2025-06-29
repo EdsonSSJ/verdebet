@@ -20,17 +20,17 @@ import {
     writeBatch
 } from "firebase/firestore";
 
-// --- PASSO 1: COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE ---
+// --- Configuração Segura do Firebase com Variáveis de Ambiente ---
 const firebaseConfig = {
-  apiKey: "AIzaSyCJh_COt-t55aHwcupvd5O6IAtWZLDkVzo",
-  authDomain: "verdebet-86e5d.firebaseapp.com",
-  projectId: "verdebet-86e5d",
-  storageBucket: "verdebet-86e5d.firebasestorage.app",
-  messagingSenderId: "1024525782610",
-  appId: "1:1024525782610:web:8ea88b3342da5d0a12998b",
-  measurementId: "G-QQHWPCH7W2"
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APP_ID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
 };
-// -------------------------------------------------------------
+// --------------------------------------------------------------------
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -130,11 +130,10 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isPlacingBet, setIsPlacingBet] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-    const [currentView, setCurrentView] = useState('home'); // 'home', 'history', 'bank', 'account'
+    const [currentView, setCurrentView] = useState('home');
     const [selectedCompetition, setSelectedCompetition] = useState('all');
     const profileMenuRef = useRef(null);
 
-    // Click away to close profile menu
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
@@ -543,7 +542,7 @@ const App = () => {
 const HistoryView = ({ bets }) => (
     <div className="bg-gray-800 p-6 rounded-lg">
         <h2 className="text-2xl font-semibold mb-4 text-green-400">Histórico de Apostas</h2>
-        <div className="space-y-3">
+        <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
             {bets.length === 0 ? <p className="text-gray-400 text-center py-4">Ainda não fez nenhuma aposta.</p> : (
                 bets.map(bet => {
                     const getStatusClass = () => {
